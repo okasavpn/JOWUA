@@ -75,20 +75,22 @@
       console.log("✅ Display Name:", nickname);
       console.log("✅ Email:", email);
 
-      // ✅ 等待 webhook 送出成功才跳轉
-      const res = await fetch("https://hook.us1.make.com/yci84no2zw89i23hdj8rils9utasegfk", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid, nickname, email })
-      });
+// 傳 webhook
+await fetch("https://hook.us1.make.com/yci84no2zw89i23hdj8rils9utasegfk", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ uid, nickname, email })
+});
 
-      console.log("✅ Webhook response status:", res.status);
+// 嘗試加好友跳轉
+const addFriendUrl = "https://page.line.me/653dssrk"; 
 
-      // ✅ 跳轉到加好友頁（請換成你自己的 LINE 官方帳號網址）
-      const addFriendUrl = "https://page.line.me/653dssrk"; 
-   liff.openWindow({ url: addFriendUrl, external: true });
-      // ✅ 半秒後自動關閉 LIFF 視窗（可選）
-      setTimeout(() => liff.closeWindow(), 1000);
+try {
+  await liff.openWindow({ url: addFriendUrl, external: true });
+} catch (err) {
+  console.error("❌ openWindow failed:", err);
+}
+
 
     } catch (e) {
       document.querySelector('.loading-container').innerHTML = "<p>🚨 發生錯誤：" + e.message + "</p>";
