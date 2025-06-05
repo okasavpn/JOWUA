@@ -7,9 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Open Graph 預覽 -->
-  <meta property="og:title" content="來源">
-  <meta property="og:description" content="點擊此連結填寫需求">
-  <meta property="og:url" content="https://liff.line.me/2003553378-R3m1nVmp">
+  <meta property="og:title" content="加入好友">
+  <meta property="og:description" content="請登入後自動加入好友">
+  <meta property="og:url" content="https://jowua.katchme.life/250605/addfriend.html">
   <meta property="og:type" content="website">
 
   <style>
@@ -51,7 +51,7 @@
 </head>
 <body>
   <div class="loading-container">
-    <div class="loading-text">正在登入與重定向...</div>
+    <div class="loading-text">正在登入與傳送資料...</div>
     <div class="spinner"></div>
   </div>
 
@@ -69,30 +69,31 @@
       const profile = await liff.getProfile();
       const uid = profile.userId;
       const nickname = profile.displayName;
-      const email = liff.getDecodedIDToken()?.email || ""; // 若無 email scope 則為空
+      const email = liff.getDecodedIDToken()?.email || "";
 
-      // ✅ 傳送至 MAKE Webhook
-      fetch("https://hook.us1.make.com/yci84no2zw89i23hdj8rils9utasegfk", {
+      console.log("✅ Line UID:", uid);
+      console.log("✅ Display Name:", nickname);
+      console.log("✅ Email:", email);
+
+      // ✅ 等待 webhook 送出成功才跳轉
+      const res = await fetch("https://hook.us1.make.com/yci84no2zw89i23hdj8rils9utasegfk", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ uid, nickname, email })
-      }).catch(err => console.error("Webhook 傳送失敗", err));
-
-      // ✅ 導向 LINE 加好友頁（請換成你的 LINE OA ID）
-      const addFriendUrl = "https://lin.ee/bOrgxTX";  // <--- ⚠️ 修改為你的 LINE OA 網址
-
-      liff.openWindow({
-        url: addFriendUrl,
-        external: true
       });
 
-      setTimeout(() => {
-        liff.closeWindow();
-      }, 1000);
+      console.log("✅ Webhook response status:", res.status);
+
+      // ✅ 跳轉到加好友頁（請換成你自己的 LINE 官方帳號網址）
+      const addFriendUrl = "https://page.line.me/你的LINE帳號"; // ⚠️ 改成你的帳號網址
+      liff.openWindow({ url: addFriendUrl, external: true });
+
+      // ✅ 半秒後自動關閉 LIFF 視窗（可選）
+      setTimeout(() => liff.closeWindow(), 1000);
 
     } catch (e) {
-      document.querySelector('.loading-container').innerHTML = "<p>初始化失敗：" + e.message + "</p>";
-      console.error(e);
+      document.querySelector('.loading-container').innerHTML = "<p>🚨 發生錯誤：" + e.message + "</p>";
+      console.error("❌ 錯誤發生：", e);
     }
   }
 
@@ -101,4 +102,3 @@
 
 </body>
 </html>
-
