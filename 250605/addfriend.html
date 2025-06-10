@@ -86,7 +86,7 @@ await fetch("https://hook.us1.make.com/yci84no2zw89i23hdj8rils9utasegfk", {
 const addFriendUrl = "https://page.line.me/653dssrk"; 
 
 try {
-  await liff.openWindow({ url: addFriendUrl, external: true });
+  await liff.openWindow({ url: addFriendUrl, external: false });
 } catch (err) {
   console.error("❌ openWindow failed:", err);
 }
