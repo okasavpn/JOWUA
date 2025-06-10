@@ -61,6 +61,20 @@
     try {
       await liff.init({ liffId: "2003553378-dwar3Na2" });
       await liff.ready;
+            // ****** 新增這一段來判斷是否在 LINE App 內開啟 ******
+      if (!liff.isInClient()) {
+        // 如果不在 LINE App 內，顯示提示訊息並提供連結讓使用者點擊
+        document.querySelector('.loading-container').innerHTML = `
+          <p>請使用 LINE 應用程式開啟此連結，以獲得完整體驗。</p>
+          <a href="https://liff.line.me/${liff.getContext().liffId}" target="_blank" style="display:inline-block; padding: 10px 20px; background-color: #06C755; color: white; border-radius: 5px; text-decoration: none; margin-top: 20px;">
+            在 LINE 應用程式中開啟
+          </a>
+          <p style="margin-top:15px; font-size:14px; color:#666;">（如果點擊後無法開啟，請直接複製連結到 LINE 聊天室中傳送並點擊）</p>
+        `;
+        // 阻止後續的 LIFF 邏輯執行
+        return; 
+      }
+      // ****** 新增到這裡為止 ******
 
       if (!liff.isLoggedIn()) {
         liff.login();
