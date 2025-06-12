@@ -6,22 +6,47 @@
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      font-family: sans-serif;
-      background-color: #f0f0f0;
     }
-    .loading {
-      text-align: center;
+
+    .logo-container {
+      position: relative;
+      width: 300px; /* 可依 LOGO 寬度微調 */
+      height: auto;
+    }
+
+    .gray-logo, .black-logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .black-logo {
+      /* 一開始完全被遮住 */
+      clip-path: inset(0 100% 0 0);
+      animation: revealLogo 1s ease forwards;
+    }
+
+    @keyframes revealLogo {
+      0% { clip-path: inset(0 100% 0 0); }
+      100% { clip-path: inset(0 0% 0 0); }
     }
   </style>
 </head>
 <body>
-  <div class="loading">
-    <p>登入中，請稍候...</p>
+  <div class="logo-container">
+    <img class="gray-logo" src="https://lineliff.jowua-life.com/250613/jowuagray.png" alt="JOWUA Gray">
+    <img class="black-logo" src="https://lineliff.jowua-life.com/250613/jowuablack.png" alt="JOWUA Black">
   </div>
 
   <script>
