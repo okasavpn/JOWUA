@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>登入中...</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+    }
+    .loading {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading">
+    <p>登入中，請稍候...</p>
+  </div>
+
+  <script>
+    const liffId = "2003553378-RqyQWpyg"; // 你的 LIFF ID
+    const externalRedirectUrl = "https://global.jowua-life.com/pages/ucare-campaign"; // 外部頁面
+
+    async function main() {
+      try {
+        await liff.init({ liffId });
+        await liff.ready;
+
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+
+        const profile = await liff.getProfile();
+        const uid = profile.userId;
+        const nickname = profile.displayName;
+        const email = liff.getDecodedIDToken()?.email || "";
+
+        await fetch("https://hook.us1.make.com/yci84no2zw89i23hdj8rils9utasegfk", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid, nickname, email })
+        });
+
+        // ✅ 先打開外部瀏覽器的網址
+        liff.openWindow({
+          url: externalRedirectUrl,
+          external: true
+        });
+
+        // ✅ 然後延遲 0.5 秒自動關閉 LIFF 頁面
+        setTimeout(() => {
+          liff.closeWindow();
+        }, 500); // 500 毫秒 = 半秒
+
+      } catch (err) {
+        console.error("錯誤：", err);
+        document.querySelector('.loading').innerHTML = `<p>🚨 發生錯誤：${err.message}</p>`;
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
