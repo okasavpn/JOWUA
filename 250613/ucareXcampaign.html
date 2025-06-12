@@ -58,10 +58,6 @@
         await liff.init({ liffId });
         await liff.ready;
 
-        // 🔽 就加在這裡！確保 LIFF 初始化完成後再調整視窗大小
-        await liff.resizeWindow({ height: 600 }).catch(err => {
-              console.warn("resizeWindow failed:", err);
-            });
         if (!liff.isLoggedIn()) {
           liff.login();
           return;
