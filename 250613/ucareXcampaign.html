@@ -67,6 +67,7 @@
         const uid = profile.userId;
         const nickname = profile.displayName;
         const email = liff.getDecodedIDToken()?.email || "";
+        const phone = liff.getDecodedIDToken()?.phone_number || "";
 
         await fetch("https://hook.us1.make.com/yci84no2zw89i23hdj8rils9utasegfk", {
           method: "POST",
