@@ -5,20 +5,21 @@
   <title>登入中...</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
+ <style>
     html, body {
       margin: 0;
       padding: 0;
-      background-color: white;
       height: 100vh;
+      background-color: white;
       display: flex;
       justify-content: center;
       align-items: center;
+      box-sizing: border-box;
     }
 
     .logo-container {
       position: relative;
-      width: 300px; /* 可依 LOGO 寬度微調 */
+      width: 280px;
       height: auto;
     }
 
@@ -32,9 +33,8 @@
     }
 
     .black-logo {
-      /* 一開始完全被遮住 */
       clip-path: inset(0 100% 0 0);
-      animation: revealLogo 1s ease forwards;
+      animation: revealLogo 1s ease-out forwards;
     }
 
     @keyframes revealLogo {
@@ -45,8 +45,8 @@
 </head>
 <body>
   <div class="logo-container">
-    <img class="gray-logo" src="https://lineliff.jowua-life.com/250613/jowuagray1.png" alt="JOWUA Gray">
-    <img class="black-logo" src="https://lineliff.jowua-life.com/250613/jowuablack1.png" alt="JOWUA Black">
+    <img class="gray-logo" src="../images/jowuagray.png" alt="JOWUA Gray">
+    <img class="black-logo" src="../images/jowuablack.png" alt="JOWUA Black">
   </div>
 
   <script>
