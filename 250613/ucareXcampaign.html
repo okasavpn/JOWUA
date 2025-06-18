@@ -75,16 +75,8 @@
           body: JSON.stringify({ uid, nickname, email, phone })
         });
 
-        // ✅ 先打開外部瀏覽器的網址
-        liff.openWindow({
-          url: externalRedirectUrl,
-          external: true
-        });
-
-        // ✅ 然後延遲 0.5 秒自動關閉 LIFF 頁面
-        setTimeout(() => {
-          liff.closeWindow();
-        }, 500); // 500 毫秒 = 半秒
+        // 直接將使用者導向到目標 URL
+        window.location.href = externalRedirectUrl;
 
       } catch (err) {
         console.error("錯誤：", err);
