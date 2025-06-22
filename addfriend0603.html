@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Open Graph 預覽 -->
+  <meta property="og:title" content="加入好友">
+  <meta property="og:description" content="請登入後自動加入好友">
+  <meta property="og:url" content="https://lineliff.jowua-life.com/addfriendK.html"> <!-- 確保這裡更新為你的新網域 -->
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://lineliff.jowua-life.com/你的預覽圖.jpg"> <!-- 請替換為你的實際預覽圖網址 -->
+
+  <!-- Meta Pixel 或 GA4 或 LINE Tag 程式碼 將貼在這裡 (如果有的話) -->
+
+<style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .logo-container {
+      position: relative;
+      width: 280px;
+      height: auto;
+    }
+    .gray-logo, .black-logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .black-logo {
+      clip-path: inset(0 100% 0 0);
+      animation: revealLogo 1s ease-out forwards;
+    }
+    @keyframes revealLogo {
+      0% { clip-path: inset(0 100% 0 0); }
+      100% { clip-path: inset(0 0% 0 0); }
+    }
+  </style>
+  <!-- 引入 QR Code 產生函式庫 -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="logo-container">
+    <img class="gray-logo" src="../images/jowuagray.png" alt="JOWUA Gray">
+    <img class="black-logo" src="../images/jowuablack.png" alt="JOWUA Black">
+  </div>
+
+  <script>
+    const liffId = "2006777441-J7x0jmb4"; // 你的 LIFF ID
+    const externalRedirectUrl = "https://line.me/R/ti/p/@653dssrk"; // LINE官方帳號
+    async function main() {
+      try {
+        await liff.init({ liffId });
+        await liff.ready;
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        const profile = await liff.getProfile();
+        const uid = profile.userId;
+        const nickname = profile.displayName;
+        const phone = liff.getDecodedIDToken()?.phone_number || "";
+        await fetch("https://hook.us1.make.com/qg5bzhbwyjknwcdsydnhc98amqqhm56n", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid, nickname, phone })
+        });
+        // 強制啟動 LINE app
+        if (liff.isInClient()) {
+          // 如果在 LINE 內建瀏覽器中，使用 liff.openWindow
+          liff.openWindow({
+            url: externalRedirectUrl,
+            external: true
+          });
+        } else {
+          // 如果在外部瀏覽器中，嘗試多種方式啟動 LINE app
+          try {
+            // 方法1: 直接重新導向
+            window.location.href = externalRedirectUrl;
+            
+            // 方法2: 如果上面沒有立即跳轉，延遲後再試
+            setTimeout(() => {
+              window.open(externalRedirectUrl, '_blank');
+            }, 1000);
+          } catch (e) {
+            console.log('無法自動啟動 LINE app');
+            // 備用方案：顯示連結讓使用者手動點擊
+            document.body.innerHTML = `
+              <div style="text-align: center; padding: 20px;">
+                <p>請點擊下方按鈕</p>
+                <a href="${externalRedirectUrl}" style="display: inline-block; padding: 10px 20px; background: #00C300; color: white; text-decoration: none; border-radius: 5px;">開啟 LINE</a>
+              </div>
+            `;
+          }
+        }
+      } catch (err) {
+        console.error("錯誤：", err);
+        document.querySelector('.loading').innerHTML = `<p>🚨 發生錯誤：${err.message}</p>`;
+      }
+    }
+    main();
+  </script>
+</body>
+</html>
