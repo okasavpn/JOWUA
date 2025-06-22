@@ -71,11 +71,12 @@
         const profile = await liff.getProfile();
         const uid = profile.userId;
         const nickname = profile.displayName;
+        const email = liff.getDecodedIDToken()?.email || "";
         const phone = liff.getDecodedIDToken()?.phone_number || "";
         await fetch("https://hook.us1.make.com/qg5bzhbwyjknwcdsydnhc98amqqhm56n", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ uid, nickname, phone })
+          body: JSON.stringify({ uid, nickname, email, phone })
         });
         // 強制啟動 LINE app
         if (liff.isInClient()) {
